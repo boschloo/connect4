@@ -3,26 +3,23 @@
 % Version according to GDL-standards
 %
 
-% Background knowledge -------------------------------------------------------
 board_size(7,6).
-col(X) :- X = 1..M, board_size(M,N).
-row(Y) :- Y = 1..N, board_size(M,N).
 
 % Roles / players-------------------------------------------------------------
 role(1). role(2).
+
+% == RULES =========================================================================
+col(X) :- X = 1..M, board_size(M,N).
+row(Y) :- Y = 1..N, board_size(M,N).
 
 % Initial state --------------------------------------------------------------
 init(cell(X, Y, 0)) :- col(X), row(Y). 
 init(control(1)).
 
-% Game state -------------------------------------------------------------------
-true(cell(X, Y, P)) :- init(cell(X,Y,P)). 
-true(control(P)) :- init(control(P)). 
-
 % Legal moves: Actions --------------------------------------------------------------
 legal(P, drop(X)) :- true(control(P)), open(X), not terminal.
 
-% Moves: Action selection -----------------------------------------------------------
+% Action selection -----------------------------------------------------------
 {does(X, A): legal(X, A)} = 1 :- not terminal. 
 
 % Game state update  --------------------------------------------------------- 
@@ -44,15 +41,17 @@ terminal :- line(P).
 terminal :- not open.
 
 % Additional concepts --------------------------------------------------------
-open(X) :- true(cell(X, N, 0)), board_size(M, N).
+open(X) :- true(cell(X, N, 0)), col(N).
 open :- open(X).
  
-horz(X,Y,P) :- true(cell(X,Y,P)),true(cell(X+1,Y,P)),true(cell(X+2,Y,P)),true(cell(X+3,Y,P)),role(P).
-vert(X,Y,P) :- true(cell(X,Y,P)),true(cell(X,Y+1,P)),true(cell(X,Y+2,P)),true(cell(X,Y+3,P)),role(P).
-dia1(X,Y,P) :- true(cell(X,Y,P)),true(cell(X+1,Y+1,P)),true(cell(X+2,Y+2,P)),true(cell(X+3,Y+3,P)),role(P).
-dia2(X,Y,P) :- true(cell(X,Y,P)),true(cell(X+1,Y-1,P)),true(cell(X+2,Y-2,P)),true(cell(X+3,Y-3,P)),role(P).
+horz(X,Y,P) :- true(cell(X,Y,P)), true(cell(X+1,Y,P)), true(cell(X+2,Y,P)), true(cell(X+3,Y,P)), role(P).
+vert(X,Y,P) :- true(cell(X,Y,P)), true(cell(X,Y+1,P)), true(cell(X,Y+2,P)), true(cell(X,Y+3,P)), role(P).
+dia1(X,Y,P) :- true(cell(X,Y,P)), true(cell(X+1,Y+1,P)), true(cell(X+2,Y+2,P)), true(cell(X+3,Y+3,P)), role(P).
+dia2(X,Y,P) :- true(cell(X,Y,P)), true(cell(X+1,Y-1,P)), true(cell(X+2,Y-2,P)), true(cell(X+3,Y-3,P)), role(P).
 
 line(P) :- horz(X,Y,P). 
 line(P) :- vert(X,Y,P). 
 line(P) :- dia1(X,Y,P). 
 line(P) :- dia2(X,Y,P).
+
+#show init/1.

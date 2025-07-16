@@ -1,0 +1,343 @@
+/* Base Styles */
+body {
+    background-color:  rgb(181, 197, 232);
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+#container {
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+/* Game Title */
+.game-title {
+    text-align: center;
+    margin: 0 0 0px;
+    letter-spacing: 12px;
+    color: rgb(1, 1, 127);
+    font-size: 30px;
+}
+
+/* Game Board Styles */
+.game-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 350px;
+}
+
+#board-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.board-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 350px;
+}
+
+#board {
+    background-color: darkgray;
+    border: 1px solid black;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    width: 350px;
+    height: 300px;
+    position: relative;
+}
+
+#row-labels {
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    height: 300px;
+    width: 20px;
+    font-weight: bold;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-12px); /* Move row labels up by 10px */
+}
+#col-labels {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    width: 350px;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px 0;
+}
+
+/* Game Controls */
+.game-controls {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.move-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#moveInput {
+    flex: 1;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-family: "Monaco", Monaco, monospace;
+}
+
+#gameNote {
+    width: 350px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    resize: vertical;
+    font-size: 12px;
+    font-family: "Monaco", Monaco, monospace;
+}
+
+/* Control Buttons Section */
+.controls-section {
+  width: 350px;
+  margin: 0 auto;
+  border-top: 1px solid #000000;
+  padding-top: 20px;    /* gives space between the line and the content */
+}
+
+.primary-controls {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.save-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+     /* width: 350px; */
+  margin: 0 auto;
+  border-top: 1px solid #000000;
+  padding-top: 20px;    /* gives space between the line and the content */
+}
+
+.save-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-radius: 8px;
+    gap: 10px;
+}
+
+.threat-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding-bottom: 20px;    /* gives space between the line and the content */
+}
+
+.strategy‐selectors { 
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.allwide{
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.divider {
+  height: 1px;
+  background-color: #000000;
+  width: 100%;
+  margin: 20px 0;
+}
+
+/* Game State Section */
+.game-state-section {
+  width: 350px;
+  margin: 0 auto;
+  border-top: 1px solid #000000;
+  padding-top: 20px;    /* gives space between the line and the content */
+}
+
+#loadGameState, #textSchemeContainer {
+    width: 350px;
+}
+
+#loadGameState {
+    margin-bottom: 20px; /* Added spacing between loadGameState and textSchemeContainer */
+}
+
+#gameStateInput, #gameTextScheme {
+    width: 350px;
+    box-sizing: border-box;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    font-family: "Monaco", Monaco, monospace;
+}
+
+/* File Name Input */
+#fileNameInput {
+    width: 350px;
+    box-sizing: border-box;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    font-family: "Monaco", Monaco, monospace;
+}
+
+/* Button Styles */
+button {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    background-color: rgb(0, 40, 141);
+    color : white;
+}
+
+button:hover {
+    background-color: #f0f0f0;
+    color: grey;
+}
+
+/* Cell and Piece Styles */
+.cell {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.cell::before {
+    content: '';
+    width: 90%;
+    height: 90%;
+    background-color: rgb(202, 214, 253);
+    border-radius: 10%;
+    position: absolute;
+    z-index: 0;
+}
+
+.piece {
+    position: relative;
+    z-index: 1;
+    width: 80%;
+    height: 80%;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.piece.red {
+    background-color: red;
+    border: 1px solid black;
+}
+
+.piece.black {
+    background-color:rgb(0, 28, 97);
+    border: 1px solid rgb(100, 100, 100);
+}
+
+.piece.red span {
+    position: absolute;
+    font-size: 16px;
+    font-weight: normal;
+    color: hsl(0, 0%, 100%);
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+}
+.piece.black span {
+    position: absolute;
+    font-size: 16px;
+    font-weight: normal;
+    color: hsl(0, 0%, 100%);
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+}
+
+/* Threat Styles */
+.threat.black {
+    background-color: rgb(0, 13, 254) !important;
+}
+
+.threat.red {
+    background-color: rgb(255, 0, 0) !important;
+}
+
+/* Player Turn and Win Message Styles */
+#playerTurn {
+    font-size: 18px;
+    text-align: center;
+    min-height: 30px;
+}
+
+#winMessage {
+    font-size: 20px;
+    font-weight: bold;
+    color: rgb(209, 46, 46);
+    text-align: center;
+    /* min-height: 30px; */
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+#playerTurn {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* make the counts bold and in the right color */
+#playerTurn .count.red {
+  font-weight: bold;
+  color: red;
+}
+
+#playerTurn .count.black {
+  font-weight: bold;
+  color: black;
+}
+
+/* optional: color the “RED”/“BLACK” word too */
+#playerTurn .turnColor.red {
+  color: red;
+}
+#playerTurn .turnColor.black {
+  color: black;
+}

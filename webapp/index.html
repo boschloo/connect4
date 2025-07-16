@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect Four</title>
+    <link rel="stylesheet" href="styles_c4.css">
+</head>
+<body>
+    <div id="container">
+        <h2 class="game-title">&nbsp;&nbsp;CONNECT-FOUR</h2>
+        
+        <!-- Game Board Section -->
+        <section class="game-section">
+            <div id="board-container">
+                <div id="row-labels"></div>
+                <div class="board-wrapper">
+                    <div id="board"></div>
+                    <div id="col-labels"></div> <!-- Moved below board -->
+                </div>
+            </div>
+
+            <!-- Game Controls -->
+            <div class="game-controls">
+                <div class="move-input-group">
+                    <label id="moveInputLbl" for="moveInput">First move: (1)</label>
+                    <input id="moveInput" type="text" placeholder="Enter column (A-G or - for undo)">
+                </div>
+            </div>
+
+            <div id="playerTurn">
+                Player turn 
+                <span id="currentTurn" class="turnColor">RED</span> | 
+                <strong id="redCount" class="count red">0</strong>
+                <strong id="blackCount" class="count black">0</strong>
+            </div>
+
+            <!-- Game Note -->
+            <textarea id="gameNote" placeholder="Write a note about this game..." rows="3"></textarea>
+            <div id="winMessage" class="win-message"></div>
+            <div class="allwide"> 
+
+            <!-- Threat Analysis Controls -->
+               <div class="threat-controls">
+                    <button id="showThreatsWhiteBtn">Red's Threats</button>
+                    <button id="showThreatsBlackBtn">Black's Threats</button>
+                    <button id="clearThreatsBtn">Clear Threats</button>
+                    <button id="toggleMoveNumbersBtn">Toggle Numbers</button>
+             
+             </div>
+                             <button id="clearBtn">Reset game</button>  
+            </div>  
+        <!-- Save/Load Controls -->
+        <div class="save-controls">
+            <div class="file-input-group">
+                <input id="fileNameInput" type="text" placeholder="File name">
+                <input id="fileInput" type="file" accept=".json" class="hidden">
+            </div>
+            <div class="save-buttons">
+                <button id="importBtn">Import</button>
+                <button id="exportBtn">Save</button>
+                <button id="exportLogicBtn">Export Logic</button>
+            </div>
+        </div>
+     </section>
+        <!-- Control Buttons Section -->
+        <section class="controls-section">
+            <div id="controls">
+
+                <div class="strategy‐selectors">
+                    <label for="strategyRed">Strategy Red:</label>
+                    <label for="strategyBlack">Strategy Black:</label>
+
+                    <select id="strategyRed">
+                        <option value="randomStrategy" selected>random</option>
+                        <option value="mimicOpponentStrategy">mimicOpponent</option>
+                        <option value="threatBasedStrategy">threatBased</option>
+                        <option value="threatOrRandomStrategy">threatOrRandom</option>
+                         <option value="preferMiddleStrategy">threatOrMiddle</option> 
+                    </select>
+                    <select id="strategyBlack">
+                        <option value="randomStrategy" selected>random</option>
+                        <option value="mimicOpponentStrategy">mimicOpponent</option>
+                        <option value="threatBasedStrategy">threatBased</option>
+                        <option value="threatOrRandomStrategy">threatOrRandom</option>
+                         <option value="preferMiddleStrategy">threatOrMiddle</option> 
+                    </select>
+                  </div>  
+                  <div class="allwide"> 
+                    <button id="simulateBtn">Simulate</button>
+                </div>
+
+                <!-- Primary Game Controls -->
+                <div class="primary-controls">
+                    <label for="batchResults">Nr. of results:</label>
+                    <input type="number" id="batchResults" value="10" min="1" />
+                    <label for="delayValue">Delay:</label>
+                    <input type="number" id="delayValue" value="100" min="0" step="10" />
+                </div>
+                <div class="allwide"> 
+                    <button id="runBatch">Run batch</button>
+                </div>  
+            </div>
+        </section>
+
+        <!-- Game State Section -->
+        <section class="game-state-section">
+            <div id="loadGameState">
+                <label for="gameStateInput">Paste Game State:</label>
+                <textarea id="gameStateInput" placeholder="Paste your game state here..." rows="10"></textarea>
+                <button id="applyGameStateBtn">Apply Game State</button>
+            </div>
+
+            <div id="textSchemeContainer">
+                <label for="gameTextScheme">Game Text Scheme:</label>
+                <textarea id="gameTextScheme" rows="7" readonly></textarea>
+            </div>
+        </section>
+    </div>
+    <script src="script_c4.js"></script>
+</body>
+</html>
