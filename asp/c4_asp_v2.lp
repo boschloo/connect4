@@ -1,8 +1,8 @@
 % c4_asp_v2.lp
 % ASP-code for playing Connect Four.
 % Version to be used in the learning process
-% Latest changes: control/1. and numberOf/2.
-% === P R O G R A M ======== 2025-07-16 ===========================================
+
+% === P R O G R A M ======== 2025-07-19 ===========================================
 board_size(7,6).
 role(1). role(2).
 
@@ -57,6 +57,7 @@ cell(1,4,0). cell(2,4,0). cell(3,4,0). cell(4,4,0). cell(5,4,0). cell(6,4,0). ce
 cell(1,3,0). cell(2,3,0). cell(3,3,1). cell(4,3,0). cell(5,3,0). cell(6,3,0). cell(7,3,0).
 cell(1,2,0). cell(2,2,0). cell(3,2,1). cell(4,2,0). cell(5,2,0). cell(6,2,0). cell(7,2,0).
 cell(1,1,0). cell(2,1,2). cell(3,1,1). cell(4,1,2). cell(5,1,2). cell(6,1,0). cell(7,1,0).
+control(1).
 
 % Game text scheme example
 % . . . . . . .
