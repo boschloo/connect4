@@ -2,7 +2,7 @@
 % ASP-code for playing Connect Four.
 % Version to be used in the learning process
 
-% === P R O G R A M ======== 2025-07-19 ===========================================
+% === P R O G R A M ======== 2025-07-19 ======================================
 board_size(7,6).
 role(1). role(2).
 
@@ -11,9 +11,13 @@ row(Y) :- Y = 1..N, board_size(M,N).
 
 % Initial state --------------------------------------------------------------
 init(X,Y,0) :- col(X), row(Y). 
-cell(X,Y,P) :- init(X,Y,P).
+init(control(1)).
 
-% Legal moves: Actions --------------------------------------------------------------
+% Initializing a game --------------------------------------------------------
+cell(X,Y,P) :- init(X,Y,P).
+control(P) :- init(control(P)).
+
+% Legal moves: Actions -------------------------------------------------------
 legal(P, drop(X)) :- control(P), open(X), not terminal.
 
 % Action selection -----------------------------------------------------------
@@ -24,6 +28,9 @@ target(X,Y,P) :- does(P, drop(X)), cell(X,Y,0), not cell(X,Y-1,0).
 next(X,Y,P) :- cell(X,Y,P), role(P).
 next(X,Y,P) :- target(X,Y,P).
 next(X,Y,0) :- cell(X,Y,0), not target(X,Y,_).
+
+next(control(2)) :- control(1).
+next(control(1)) :- control(2). 
 
 % Goal -----------------------------------------------------------------------
 goal(P,100) :- line(P).

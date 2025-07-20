@@ -1,44 +1,44 @@
-% c4_asp_v2.lp
-% ASP-code for playing Connect Four.
-% Version to be used in the learning process
-% c4_test_v124
+% c4_test_16.lp
 
-% Test 24: no legal moves when previous player has won ================================
-% Scenario: 
+% Test 16 ======================================================
+% Board seven columns filled completel, player 2 won  
 
-% . 1 . . . . .
-% . 2 . . 1 . .
-% . 1 . 1 2 . 2
-% . 2 2 2 1 . 2
-% 2 2 2 2 1 1 1
-% 1 1 1 2 1 1 2
+% 1 1 1 2 1 2 1
+% 2 2 2 1 2 2 1
+% 1 1 1 2 1 1 1
+% 2 2 2 1 2 2 2
+% 1 1 1 2 1 1 1
+% 2 2 2 1 2 2 2
 
-cell(1,6,0). cell(2,6,1). cell(3,6,0). cell(4,6,0). cell(5,6,0). cell(6,6,0). cell(7,6,0).
-cell(1,5,0). cell(2,5,2). cell(3,5,0). cell(4,5,0). cell(5,5,1). cell(6,5,0). cell(7,5,0).
-cell(1,4,0). cell(2,4,1). cell(3,4,0). cell(4,4,1). cell(5,4,2). cell(6,4,0). cell(7,4,2).
-cell(1,3,0). cell(2,3,2). cell(3,3,2). cell(4,3,2). cell(5,3,1). cell(6,3,0). cell(7,3,2).
-cell(1,2,2). cell(2,2,2). cell(3,2,2). cell(4,2,2). cell(5,2,1). cell(6,2,1). cell(7,2,1).
-cell(1,1,1). cell(2,1,1). cell(3,1,1). cell(4,1,2). cell(5,1,1). cell(6,1,1). cell(7,1,2).
-control(1).
+cell(1,6,1). cell(2,6,1). cell(3,6,1). cell(4,6,2). cell(5,6,1). cell(6,6,2). cell(7,6,1).
+cell(1,5,2). cell(2,5,2). cell(3,5,2). cell(4,5,1). cell(5,5,2). cell(6,5,2). cell(7,5,1).
+cell(1,4,1). cell(2,4,1). cell(3,4,1). cell(4,4,2). cell(5,4,1). cell(6,4,1). cell(7,4,1).
+cell(1,3,2). cell(2,3,2). cell(3,3,2). cell(4,3,1). cell(5,3,2). cell(6,3,2). cell(7,3,2).
+cell(1,2,1). cell(2,2,1). cell(3,2,1). cell(4,2,2). cell(5,2,1). cell(6,2,1). cell(7,2,1).
+cell(1,1,2). cell(2,1,2). cell(3,1,2). cell(4,1,1). cell(5,1,2). cell(6,1,2). cell(7,1,2).
+control(2).
 
-#show line/1.
-#show horz/3.
+#show open/0.
+#show open/1.
+#show target/3.
 #show legal/2.
-#show control/1.
 #show terminal/0.
+#show does/2.
+#show line/1.
+#show goal/2.
+% #show next/1.
+% #show next/3.
 
-% Expected: 
-% no legal moves for whatever player.
+% Expected:
+% not open, terminal, line(2), no legal moves, no target, no action, next = cell, goal 0/100.
 
-% Result:
 % Answer: 1
-% terminal control(1) line(2) horz(1,2,2)
+% terminal line(2) goal(2,100) goal(1,0).
 % SATISFIABLE
 
-% Evaluation: 
-% There should be no legal moves in this scenario.
+% Evaluation: ok.
 
-% === P R O G R A M ======== 2025-07-16 ===========================================
+% === P R O G R A M ======== 2025-07-19 ======================================
 board_size(7,6).
 role(1). role(2).
 
@@ -47,9 +47,13 @@ row(Y) :- Y = 1..N, board_size(M,N).
 
 % Initial state --------------------------------------------------------------
 init(X,Y,0) :- col(X), row(Y). 
-cell(X,Y,P) :- init(X,Y,P).
+init(control(1)).
 
-% Legal moves: Actions --------------------------------------------------------------
+% Initializing a game --------------------------------------------------------
+% cell(X,Y,P) :- init(X,Y,P).
+% control(P) :- init(control(P)).
+
+% Legal moves: Actions -------------------------------------------------------
 legal(P, drop(X)) :- control(P), open(X), not terminal.
 
 % Action selection -----------------------------------------------------------
@@ -60,6 +64,9 @@ target(X,Y,P) :- does(P, drop(X)), cell(X,Y,0), not cell(X,Y-1,0).
 next(X,Y,P) :- cell(X,Y,P), role(P).
 next(X,Y,P) :- target(X,Y,P).
 next(X,Y,0) :- cell(X,Y,0), not target(X,Y,_).
+
+next(control(2)) :- control(1).
+next(control(1)) :- control(2). 
 
 % Goal -----------------------------------------------------------------------
 goal(P,100) :- line(P).
@@ -85,3 +92,4 @@ line(P) :- dia1(X,Y,P).
 line(P) :- dia2(X,Y,P).
 
 % ================================================================================
+

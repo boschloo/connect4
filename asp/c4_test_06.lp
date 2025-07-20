@@ -1,40 +1,42 @@
-% c4_asp_v2.lp
-% ASP-code for playing Connect Four.
-% Version to be used in the learning process
-% c4_test_v109
+% c4_test_06.lp
 
-% Test 9: legal/2  =====================================================================
-% Scenario: six columns available, player 2's turn.
+% Test 6  ==============================================================
+% Board with diagonal line NW-SE in cell/3.
 
-% . . . . . 2 .
-% . . . 2 . 1 .
-% . . . 1 . 2 1
-% . . 2 2 . 2 2
-% . 1 1 1 . 1 1
-% 1 2 2 1 . 2 1
+% . . . . . . .
+% . . 2 2 . . .
+% . . 1 2 . . .
+% . 2 2 1 2 1 .
+% 1 1 2 1 1 2 .
+% 2 1 1 1 2 2 1
 
-cell(1,6,0). cell(2,6,0). cell(3,6,0). cell(4,6,0). cell(5,6,0). cell(6,6,2). cell(7,6,0).
-cell(1,5,0). cell(2,5,0). cell(3,5,0). cell(4,5,2). cell(5,5,0). cell(6,5,1). cell(7,5,0).
-cell(1,4,0). cell(2,4,0). cell(3,4,0). cell(4,4,1). cell(5,4,0). cell(6,4,2). cell(7,4,1).
-cell(1,3,0). cell(2,3,0). cell(3,3,2). cell(4,3,2). cell(5,3,0). cell(6,3,2). cell(7,3,2).
-cell(1,2,0). cell(2,2,1). cell(3,2,1). cell(4,2,1). cell(5,2,0). cell(6,2,1). cell(7,2,1).
-cell(1,1,1). cell(2,1,2). cell(3,1,2). cell(4,1,1). cell(5,1,0). cell(6,1,2). cell(7,1,1).
-control(2).
+cell(1,6,0). cell(2,6,0). cell(3,6,0). cell(4,6,0). cell(5,6,0). cell(6,6,0). cell(7,6,0).
+cell(1,5,0). cell(2,5,0). cell(3,5,2). cell(4,5,2). cell(5,5,0). cell(6,5,0). cell(7,5,0).
+cell(1,4,0). cell(2,4,0). cell(3,4,1). cell(4,4,2). cell(5,4,0). cell(6,4,0). cell(7,4,0).
+cell(1,3,0). cell(2,3,2). cell(3,3,2). cell(4,3,1). cell(5,3,2). cell(6,3,1). cell(7,3,0).
+cell(1,2,1). cell(2,2,1). cell(3,2,2). cell(4,2,1). cell(5,2,1). cell(6,2,2). cell(7,2,0).
+cell(1,1,2). cell(2,1,1). cell(3,1,1). cell(4,1,1). cell(5,1,2). cell(6,1,2). cell(7,1,1).
+control(1).
 
-#show legal/2.
+#show line/1.
+#show horz/3.
+#show vert/3.
+#show dia1/3.
+#show dia2/3.
+#show goal/2.
+#show terminal/0.
 
 % Expected: 
-% legal(2, drop(1..7)) except for drop(6)).
+% terminal line(2) dia1(3,5,2), goal 0/100.
 
 % Result:
 % Answer: 1
-% legal(2,drop(1)) legal(2,drop(2)) legal(2,drop(3)) legal(2,drop(4)) legal(2,drop(5)) legal(2,drop(7))
-% ... (6 answer sets)
+% terminal line(2) goal(2,100) goal(1,0) dia2(3,5,2)
 % SATISFIABLE
 
-% Evaluation: ok
+% Evaluation: ok.
 
-% === P R O G R A M ======== 2025-07-16 ===========================================
+% === P R O G R A M ======== 2025-07-19 ======================================
 board_size(7,6).
 role(1). role(2).
 
@@ -43,9 +45,13 @@ row(Y) :- Y = 1..N, board_size(M,N).
 
 % Initial state --------------------------------------------------------------
 init(X,Y,0) :- col(X), row(Y). 
-cell(X,Y,P) :- init(X,Y,P).
+init(control(1)).
 
-% Legal moves: Actions --------------------------------------------------------------
+% Initializing a game --------------------------------------------------------
+% cell(X,Y,P) :- init(X,Y,P).
+% control(P) :- init(control(P)).
+
+% Legal moves: Actions -------------------------------------------------------
 legal(P, drop(X)) :- control(P), open(X), not terminal.
 
 % Action selection -----------------------------------------------------------
@@ -56,6 +62,9 @@ target(X,Y,P) :- does(P, drop(X)), cell(X,Y,0), not cell(X,Y-1,0).
 next(X,Y,P) :- cell(X,Y,P), role(P).
 next(X,Y,P) :- target(X,Y,P).
 next(X,Y,0) :- cell(X,Y,0), not target(X,Y,_).
+
+next(control(2)) :- control(1).
+next(control(1)) :- control(2). 
 
 % Goal -----------------------------------------------------------------------
 goal(P,100) :- line(P).
@@ -81,3 +90,4 @@ line(P) :- dia1(X,Y,P).
 line(P) :- dia2(X,Y,P).
 
 % ================================================================================
+

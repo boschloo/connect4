@@ -1,38 +1,41 @@
-% c4_asp_v2.lp
-% ASP-code for playing Connect Four.
-% Version to be used in the learning process
-% c4_test_v101
+% c4_test_02.lp
 
-% Test 1: board_size ==========================================================
-% Scenario: Initial, background facts
+% Test 2 ============================================================
+% Start of the game. Testing Game state on the first move
 
-#show board_size/2.
+#show cell/3.
+#show control/1.
 
 % Expected: 
-% board_size as given
+% all cells empty (0), player 1.
 
 % Result:
-% Answer: 1
-% board_size(7,6)
-% Answer: 2
-% board_size(7,6)
-% Answer: 3
-% board_size(7,6)
-% Answer: 4
-% board_size(7,6)
-% Answer: 5
-% board_size(7,6)
-% Answer: 6
-% board_size(7,6)
-% Answer: 7
-% board_size(7,6)
+% control(1) 
+% cell(1,6,0) cell(2,6,0) cell(3,6,0) cell(4,6,0) cell(5,6,0) cell(6,6,0) cell(7,6,0)
+% cell(1,5,0) cell(2,5,0) cell(3,5,0) cell(4,5,0) cell(5,5,0) cell(6,5,0) cell(7,5,0)
+% cell(1,4,0) cell(2,4,0) cell(3,4,0) cell(4,4,0) cell(5,4,0) cell(6,4,0) cell(7,4,0)
+% cell(1,3,0) cell(2,3,0) cell(3,3,0) cell(4,3,0) cell(5,3,0) cell(6,3,0) cell(7,3,0)
+% cell(1,2,0) cell(2,2,0) cell(3,2,0) cell(4,2,0) cell(5,2,0) cell(6,2,0) cell(7,2,0)  
+% cell(1,1,0) cell(2,1,0) cell(3,1,0) cell(4,1,0) cell(5,1,0) cell(6,1,0) cell(7,1,0) 
+% ... (7 answers)
 % SATISFIABLE
 
-% Evaluation: ok
-% Because of the choice possibility in Action selection, there are 7 answers / answer sets.
-% In the following tests, just one set is shown
+% . . . . . . .
+% . . . . . . .
+% . . . . . . .
+% . . . . . . .
+% . . . . . . .
+% . . . . . . .
 
-% === P R O G R A M ======== 2025-07-16 ===========================================
+% 
+% Models       : 7
+% Calls        : 1
+% Time         : 0.003s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+% CPU Time     : 0.003s
+
+% Evaluation: ok.
+
+% === P R O G R A M ======== 2025-07-19 ======================================
 board_size(7,6).
 role(1). role(2).
 
@@ -41,9 +44,13 @@ row(Y) :- Y = 1..N, board_size(M,N).
 
 % Initial state --------------------------------------------------------------
 init(X,Y,0) :- col(X), row(Y). 
-cell(X,Y,P) :- init(X,Y,P).
+init(control(1)).
 
-% Legal moves: Actions --------------------------------------------------------------
+% Initializing a game --------------------------------------------------------
+cell(X,Y,P) :- init(X,Y,P).
+control(P) :- init(control(P)).
+
+% Legal moves: Actions -------------------------------------------------------
 legal(P, drop(X)) :- control(P), open(X), not terminal.
 
 % Action selection -----------------------------------------------------------
@@ -54,6 +61,9 @@ target(X,Y,P) :- does(P, drop(X)), cell(X,Y,0), not cell(X,Y-1,0).
 next(X,Y,P) :- cell(X,Y,P), role(P).
 next(X,Y,P) :- target(X,Y,P).
 next(X,Y,0) :- cell(X,Y,0), not target(X,Y,_).
+
+next(control(2)) :- control(1).
+next(control(1)) :- control(2). 
 
 % Goal -----------------------------------------------------------------------
 goal(P,100) :- line(P).
@@ -79,3 +89,4 @@ line(P) :- dia1(X,Y,P).
 line(P) :- dia2(X,Y,P).
 
 % ================================================================================
+
