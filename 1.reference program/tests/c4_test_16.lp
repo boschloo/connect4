@@ -1,45 +1,44 @@
-% c4_test_11.lp
+% c4_test_16.lp
 
-% Test 11 ===================================================================
-% Board seven columns filled completely without a winner, end of the game
+% Test 16 ======================================================
+% Board seven columns filled completel, player 2 won  
 
+% 1 1 1 2 1 2 1
+% 2 2 2 1 2 2 1
 % 1 1 1 2 1 1 1
 % 2 2 2 1 2 2 2
 % 1 1 1 2 1 1 1
 % 2 2 2 1 2 2 2
-% 1 1 1 2 1 1 1
-% 2 2 2 1 2 2 2
 
-cell(1,6,1). cell(2,6,1). cell(3,6,1). cell(4,6,2). cell(5,6,1). cell(6,6,1). cell(7,6,1).
-cell(1,5,2). cell(2,5,2). cell(3,5,2). cell(4,5,1). cell(5,5,2). cell(6,5,2). cell(7,5,2).
+cell(1,6,1). cell(2,6,1). cell(3,6,1). cell(4,6,2). cell(5,6,1). cell(6,6,2). cell(7,6,1).
+cell(1,5,2). cell(2,5,2). cell(3,5,2). cell(4,5,1). cell(5,5,2). cell(6,5,2). cell(7,5,1).
 cell(1,4,1). cell(2,4,1). cell(3,4,1). cell(4,4,2). cell(5,4,1). cell(6,4,1). cell(7,4,1).
 cell(1,3,2). cell(2,3,2). cell(3,3,2). cell(4,3,1). cell(5,3,2). cell(6,3,2). cell(7,3,2).
 cell(1,2,1). cell(2,2,1). cell(3,2,1). cell(4,2,2). cell(5,2,1). cell(6,2,1). cell(7,2,1).
 cell(1,1,2). cell(2,1,2). cell(3,1,2). cell(4,1,1). cell(5,1,2). cell(6,1,2). cell(7,1,2).
-control(1).
+control(2).
 
 #show open/0.
 #show open/1.
 #show target/3.
 #show legal/2.
 #show terminal/0.
+#show does/2.
 #show line/1.
 #show goal/2.
 % #show next/1.
 % #show next/3.
 
-% Expected: 
-% not open, not open/1
-% no legal moves, no target, terminal/0, no line, terminal. Goal 50/50.
+% Expected:
+% not open, terminal, line(2), no legal moves, no target, no action, next = cell, goal 0/100.
 
-% Result: 
 % Answer: 1
-% terminal goal(1,50) goal(2,50)
+% terminal line(2) goal(2,100) goal(1,0).
 % SATISFIABLE
 
 % Evaluation: ok.
 
-% === P R O G R A M ======== 2025-07-19 ======================================
+% === R E F E R E N C E   P R O G R A M ===== 2025-07-19 ========================
 board_size(7,6).
 role(1). role(2).
 

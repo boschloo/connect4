@@ -1,20 +1,20 @@
-% c4_v720_prefs.lp
+% c4_v720_tests.lp
 % 
 % Testing: game state --------------------------------------------------------------------
 cell(1,6,0). cell(2,6,0). cell(3,6,0). cell(4,6,0). cell(5,6,0). cell(6,6,0). cell(7,6,0).
 cell(1,5,0). cell(2,5,0). cell(3,5,0). cell(4,5,0). cell(5,5,0). cell(6,5,0). cell(7,5,0).
-cell(1,4,0). cell(2,4,0). cell(3,4,0). cell(4,4,0). cell(5,4,0). cell(6,4,0). cell(7,4,0).
-cell(1,3,0). cell(2,3,0). cell(3,3,0). cell(4,3,0). cell(5,3,2). cell(6,3,0). cell(7,3,0).
-cell(1,2,0). cell(2,2,0). cell(3,2,0). cell(4,2,0). cell(5,2,2). cell(6,2,0). cell(7,2,0).
-cell(1,1,1). cell(2,1,0). cell(3,1,1). cell(4,1,1). cell(5,1,2). cell(6,1,2). cell(7,1,0).
-control(1).
+cell(1,4,0). cell(2,4,0). cell(3,4,0). cell(4,4,2). cell(5,4,0). cell(6,4,0). cell(7,4,0).
+cell(1,3,0). cell(2,3,2). cell(3,3,0). cell(4,3,1). cell(5,3,0). cell(6,3,0). cell(7,3,0).
+cell(1,2,0). cell(2,2,1). cell(3,2,0). cell(4,2,1). cell(5,2,1). cell(6,2,2). cell(7,2,0).
+cell(1,1,0). cell(2,1,2). cell(3,1,2). cell(4,1,1). cell(5,1,1). cell(6,1,1). cell(7,1,2).
+control(2).
 
 % . . . . . . .
 % . . . . . . .
-% . . . . . . .
-% . . . . 2 . .
-% . . . . 2 . .
-% 1 . 1 1 2 2 .
+% . . . 2 . . .
+% . 2 . 1 . . .
+% . 1 . 1 1 2 .
+% . 2 2 1 1 1 2
 
 % Strategies: 1. Win 2. Block opponent 3. Choose center columns. 4. Random.
 :~ does(P,drop(X)), not check(P,X). [50@1] 
@@ -22,26 +22,19 @@ control(1).
 :~ does(P,drop(X)), not center(X). [10@1]
 
 center(X) :- X > 2, X < 6, col(X).
+
+% ===================================================================
 #show does/2.
 
 % Result:  --------------------------------------
-% clingo version 5.4.0
-% Reading from /Users/boschloo/c4/c4_v720_prefs.lp
 % Solving...
 % Answer: 1
-% does(1,drop(1))
+% does(2,drop(1))
 % Optimization: 80
 % Answer: 2
-% does(1,drop(2))
-% Optimization: 30
+% does(2,drop(5))
+% Optimization: 20
 % OPTIMUM FOUND
-
-% Models       : 2
-%   Optimum    : yes
-% Optimization : 30
-% Calls        : 1
-% Time         : 0.005s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
-% CPU Time     : 0.005s
 
 % === P R O G R A M ======== 2025-07-26 ======================================
 board_size(7,6).

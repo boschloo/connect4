@@ -1,45 +1,42 @@
-% c4_test_13.lp
+% c4_test_03.lp
 
-% Test 13 ===========================================================
-% Board almost full, one column open, check player 2 
- 
-% 1 1 1 2 1 . 1
-% 2 2 2 1 2 2 1
-% 1 1 1 2 1 1 1
-% 2 2 2 1 2 2 2
-% 1 1 1 2 1 1 1
-% 2 2 2 1 2 2 2
+% Test 3 ================================================================
+% Board with horizontal line in cell/3.
 
-cell(1,6,1). cell(2,6,1). cell(3,6,1). cell(4,6,2). cell(5,6,1). cell(6,6,0). cell(7,6,1).
-cell(1,5,2). cell(2,5,2). cell(3,5,2). cell(4,5,1). cell(5,5,2). cell(6,5,2). cell(7,5,1).
-cell(1,4,1). cell(2,4,1). cell(3,4,1). cell(4,4,2). cell(5,4,1). cell(6,4,1). cell(7,4,1).
-cell(1,3,2). cell(2,3,2). cell(3,3,2). cell(4,3,1). cell(5,3,2). cell(6,3,2). cell(7,3,2).
-cell(1,2,1). cell(2,2,1). cell(3,2,1). cell(4,2,2). cell(5,2,1). cell(6,2,1). cell(7,2,1).
-cell(1,1,2). cell(2,1,2). cell(3,1,2). cell(4,1,1). cell(5,1,2). cell(6,1,2). cell(7,1,2).
-control(2).
+% . 1 . . . . .
+% . 2 . . 1 . .
+% . 1 . 1 2 . 2
+% . 2 2 2 1 . 2
+% 2 2 2 2 1 1 1
+% 1 1 1 2 1 1 2
 
-#show open/0.
-#show open/1.
-#show target/3.
-#show legal/2.
-#show terminal/0.
-#show does/2.
+cell(1,6,0). cell(2,6,1). cell(3,6,0). cell(4,6,0). cell(5,6,0). cell(6,6,0). cell(7,6,0).
+cell(1,5,0). cell(2,5,2). cell(3,5,0). cell(4,5,0). cell(5,5,1). cell(6,5,0). cell(7,5,0).
+cell(1,4,0). cell(2,4,1). cell(3,4,0). cell(4,4,1). cell(5,4,2). cell(6,4,0). cell(7,4,2).
+cell(1,3,0). cell(2,3,2). cell(3,3,2). cell(4,3,2). cell(5,3,1). cell(6,3,0). cell(7,3,2).
+cell(1,2,2). cell(2,2,2). cell(3,2,2). cell(4,2,2). cell(5,2,1). cell(6,2,1). cell(7,2,1).
+cell(1,1,1). cell(2,1,1). cell(3,1,1). cell(4,1,2). cell(5,1,1). cell(6,1,1). cell(7,1,2).
+control(1). 
+
 #show line/1.
+#show horz/3.
+#show vert/3.
+#show dia1/3.
+#show dia2/3.
 #show goal/2.
-% #show next/1.
-% #show next/3.
+#show terminal/0.
 
-% Expected:
-% open, open(6), 1 target, legal(2,drop(6), no line, not terminal, goal 50/50.
+% Expected: 
+% terminal line(2) horz(1,2,2), goal 0/100.
 
 % Result:
 % Answer: 1
-% open open(6) goal(1,50) goal(2,50) legal(2,drop(6)) target(6,6,2) does(2,drop(6))
+% terminal line(2) goal(2,100) goal(1,0) horz(1,2,2)
 % SATISFIABLE
 
 % Evaluation: ok.
 
-% === P R O G R A M ======== 2025-07-19 ======================================
+% === R E F E R E N C E   P R O G R A M ===== 2025-07-19 ========================
 board_size(7,6).
 role(1). role(2).
 
