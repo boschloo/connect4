@@ -341,3 +341,7 @@ button:hover {
 #playerTurn .turnColor.black {
   color: black;
 }
+
+#gameTextScheme {
+    background-color:rgb(214, 229, 253);
+}

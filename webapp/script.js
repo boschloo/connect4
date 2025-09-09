@@ -1,9 +1,6 @@
 // Connect Four
 // vr 20 december 2024
-// Initial game state
-// STILL TO DO:
-// - Run Batch, get the proper simulations for both players, see Batch Simulation Implementation!!
-// - Run Batch, clean up button text after done.
+// wo 3 september 2025
 
 const gameState = {
     board: Array.from({ length: 6 }, () => Array(7).fill(null)), // 6x7 empty board
@@ -21,8 +18,6 @@ const strategies = {
   preferMiddleStrategy,
 };
 
-let globalred = 0;
-let globalblack = 0;
 let cumulativeGameStates = ''; // Stores all game states for moves
 
 // DOM Elements
@@ -38,6 +33,7 @@ const moveLbl = document.getElementById('moveInputLbl');
 const redCountEl   = document.getElementById('redCount');
 const blackCountEl = document.getElementById('blackCount');
 const currentTurnEl = document.getElementById('currentTurn');
+const runBatchBtn = document.getElementById('runBatch');
 
 // Initialize Board UI
 function createBoardUI() {
@@ -113,44 +109,78 @@ function updateCounters() {
   return { red, black };
 }
 
-// Undo the last move
+// CHANGED
 function undoLastMove() {
-    const lastMove = gameState.moveHistory.pop();
-    if (lastMove) {
-        const { row, column, color } = lastMove;
-        gameState.board[row][column] = null;
-        clearUIAt(row, column);
-        gameState.currentTurn = color;
-        updateCounters();
-        updatePlayerTurn();
-    } else {
-        alert('No moves to undo!');
+  const lastMove = gameState.moveHistory.pop();
+  if (lastMove) {
+    const { row, column, color } = lastMove;
+    gameState.board[row][column] = null;
+    clearUIAt(row, column);
+    gameState.currentTurn = color;
+
+    // Recompute winner after undo
+    const winnerNow = detectWinner();
+    gameState.gameOver = !!winnerNow;
+
+    // keep the textarea in sync if you added that earlier
+    removeLastMoveFromGameNote?.();
+
+    // If no longer a win, clear the banner
+    if (!gameState.gameOver) {
+      clearWinBanner();
     }
+
+    // ↓ NEW: update the move label after undo
+    updateMoveLabel();
+
+    // (optional) recompute gameOver, then UI updates
+    updateCounters();
+    updatePlayerTurn();
+  } else {
+    alert('No moves to undo!');
+  }
 }
 
-// Handle Move Input (via Input Field)
+
+// CHANGED
 moveInput.addEventListener('input', (event) => {
-    const input = event.target.value.toUpperCase(); 
-    if (input === '-') {
-        undoLastMove();
-    } else if (/^[A-G]$/.test(input)) {
-        const column = input.charCodeAt(0) - 'A'.charCodeAt(0);
-        placePieceInColumn(column);
-    } else {
-        alert('Invalid input. Enter A-G for columns or "-" to undo.');
-    }
+  const input = event.target.value.toUpperCase();
 
-    moveInput.value = ''; // Clear input
-});
+  // Always allow undo, even after game over
+  if (input === '-') {
+    undoLastMove();
+    event.target.value = '';
+    return;
+  }
 
-// Handle Move Input (via Cell Click)
-boardElement.addEventListener('click', (event) => {
-    const clickedCell = event.target.closest('.cell');
-    if (!clickedCell) return;
+  // If the game ended, ignore any non-undo input
+  if (gameState.gameOver) {
+    event.target.value = '';
+    return;
+  }
 
-    const column = parseInt(clickedCell.dataset.column, 10);
+  if (/^[A-G]$/.test(input)) {
+    const column = input.charCodeAt(0) - 'A'.charCodeAt(0);
     placePieceInColumn(column);
+  } else if (input !== '') {
+    alert('Invalid input. Enter A-G for columns or "-" to undo.');
+  }
+
+  event.target.value = ''; // Clear input
 });
+
+
+// CHANGED
+boardElement.addEventListener('click', (event) => {
+  if (gameState.gameOver) return; // ignore clicks after game over
+
+  const clickedCell = event.target.closest('.cell');
+  if (!clickedCell) return;
+
+  const column = parseInt(clickedCell.dataset.column, 10);
+  placePieceInColumn(column);
+});
+
 
 // Export Game State
 exportBtn.addEventListener('click', () => {
@@ -268,7 +298,9 @@ function loadGameState(importedState) {
 
         // Delay the alert to ensure the UI is updated first
         setTimeout(() => {
-            alert(`Player ${winner.toUpperCase()} wins!`);
+            if (!isBatchMode) {
+                alert(`Player ${winner.toUpperCase()} wins!`);
+            }
         }, 100); // 100ms delay
 
         gameState.currentTurn = winner; // Set the winner as the current turn
@@ -283,6 +315,7 @@ function loadGameState(importedState) {
 
 // Display a win message below the board
 function displayWinMessage(winner) {
+    if (isBatchMode) return;
     const winMessageElement = document.getElementById('winMessage');
     winMessageElement.textContent = `${winner.toUpperCase()} wins with 4 in a row!`;
     winMessageElement.classList.add('active');
@@ -335,21 +368,21 @@ function detectWinner() {
     return null;
 }
 
+// CHANGED
 function placePieceInColumn(column) {
-    const lowestCell = findLowestEmptyCell(column);
-    if (lowestCell) {
-        const { row, column } = lowestCell;
-        const color = gameState.currentTurn; // 'red' or 'black'
+  if (gameState.gameOver) return; // do nothing if the game already ended
+
+  const lowestCell = findLowestEmptyCell(column);
+  if (lowestCell) {
+    const { row, column } = lowestCell;
+    const color = gameState.currentTurn; // 'red' or 'black'
 
         // Update the game state
         gameState.board[row][column] = color;
         gameState.moveHistory.push({ row, column, color });
 
         // Register the move in the gameNote
-        const gameNote = document.getElementById('gameNote');
-        const columnLetter = String.fromCharCode(65 + column); // Convert 0-6 to A-G
-        const move = color === 'red' ? columnLetter : columnLetter.toLowerCase();
-        gameNote.value += `${move}${6 - row} `; // Append the move to the gameNote with a space
+        appendMoveToGameNote(row, column, color);
 
         // Update the UI
         updateUI(row, column, color, gameState.moveHistory.length);
@@ -367,7 +400,9 @@ function placePieceInColumn(column) {
         
             // Delay the alert to ensure the UI is updated first
             setTimeout(() => {
-                alert(`Player ${winner.toUpperCase()} wins!`);
+                if (!isBatchMode) {
+                    alert(`Player ${winner.toUpperCase()} wins!`);
+                }
             }, 100); // 100ms delay
         } else {
             // Switch the turn to the other player
@@ -376,7 +411,7 @@ function placePieceInColumn(column) {
         }
     
     } else {
-        alert('Column is full!');
+    alert('Column is full!');
     }
 }
 
@@ -395,13 +430,15 @@ function resetGame() {
     createColumnLabels(); // Recreate column labels
     document.getElementById('winMessage').textContent = ''; // Clear win message
     document.getElementById('winMessage').classList.remove('active'); // Hide win message
+    document.getElementById('runBatch').textContent = 'Run Batch';
 
+    moveLbl.textContent = 'First move: (1)';
     // Update player turn
     updatePlayerTurn();
 
     // Refocus the input field for smooth gameplay
     moveInput.value = '';
-    gameNote.value = '';
+    document.getElementById('gameNote').value = '';
     gameStateInput.value = '';
     gameTextScheme.value = '';
     updateCounters();
@@ -465,6 +502,8 @@ moveInput.value = '';
 moveInput.focus();
 
 let moveNumbersVisible = true; // Track if move numbers are visible
+let isBatchMode = false;
+
 
 // Event listener for the Toggle Move Numbers button
 document.getElementById('toggleMoveNumbersBtn').addEventListener('click', () => {
@@ -641,7 +680,6 @@ function applyGameStateFromInput(input) {
     updateBoardUI();
 }
 
-
 // Function to generate the text-based scheme of the game state
 function generateTextScheme() {
     const rows = [];
@@ -677,39 +715,6 @@ function updateBoardUI() {
     updateTextScheme();
     updateCounters();
     updatePlayerTurn();
-}
-
-// Function to simulate a game 
-document.getElementById('simulateBtn').addEventListener('click', () => {
-      // Read the selected strategy names
-  const whiteName = document.getElementById('strategyRed').value;
-  const blackName = document.getElementById('strategyBlack').value;
-  // Look up the actual functions
-  const strategyWhite = strategies[whiteName];
-  const strategyBlack = strategies[blackName];
-    // Sanity check
-  if (!strategyWhite || !strategyBlack) {
-    console.error('One of the selected strategies is not defined:', whiteName, blackName);
-    return;
-  }
-    simulateGame(strategyWhite,strategyBlack);
-});
-
-async function simulateGame(strategyWhite, strategyBlack) {
-    resetGame(); 
-    let currentPlayer = 'red'; 
-    while (!gameState.gameOver) {
-        const legalColumns = getLegalColumns();
-        if (legalColumns.length === 0) {
-           // board is full, stop the simulation with no winner
-           break;
-        }
-        const strategy = currentPlayer === 'red' ? strategyWhite : strategyBlack;
-        const chosenColumn = doMove(strategy);
-        placePieceInColumn(chosenColumn);
-        currentPlayer = (currentPlayer === 'red' ? 'black' : 'red');
-        await delay(100);
-    }
 }
 
 // Function to choose a column based on the strategy
@@ -1002,38 +1007,103 @@ function detectWinningLines() {
     return winningLines; // Return all winning lines
 }
 
+// Function to simulate a game 
+document.getElementById('simulateBtn').addEventListener('click', () => {
+      // Read the selected strategy names
+  const whiteName = document.getElementById('strategyRed').value;
+  const blackName = document.getElementById('strategyBlack').value;
+  // Look up the actual functions
+  const strategyWhite = strategies[whiteName];
+  const strategyBlack = strategies[blackName];
+    // Sanity check
+  if (!strategyWhite || !strategyBlack) {
+    console.error('One of the selected strategies is not defined:', whiteName, blackName);
+    return;
+  }
+    simulateGame(strategyWhite,strategyBlack);
+});
+
+async function simulateGame(strategyWhite, strategyBlack) {
+    resetGame(); 
+    let currentPlayer = 'red'; 
+    const input = document.getElementById('delayValue');
+    const myDelay = parseInt(input.value);
+    while (!gameState.gameOver) {
+        const legalColumns = getLegalColumns();
+        if (legalColumns.length === 0) {
+           // board is full, stop the simulation with no winner
+           break;
+        }
+        const strategy = currentPlayer === 'red' ? strategyWhite : strategyBlack;
+        const chosenColumn = doMove(strategy);
+        placePieceInColumn(chosenColumn);
+        currentPlayer = (currentPlayer === 'red' ? 'black' : 'red');
+        await delay(myDelay);
+    }
+}
+
 document.getElementById('runBatch').addEventListener('click', runBatch);
 
 async function runBatch() {
-  const input = document.getElementById('batchResults');
-  const desired = Math.max(1, parseInt(input.value, 10) || 10);
+    const batchResults = [];
+    const input = document.getElementById('batchResults');
+    const desired = Math.max(1, parseInt(input.value, 10) || 10);
 
-  let count = 0;
-  const btn = document.getElementById('runBatch');
-  btn.disabled = true;
-  btn.textContent = `Running… (0/${desired})`;
+    isBatchMode = true;
+    let count = 0;
+    const btn = document.getElementById('runBatch');
+    btn.disabled = true;
+    btn.textContent = `Running… (0/${desired})`;
 
-  while (count < desired) {
+    while (count < desired) {
     // 1) start fresh
-    resetGame();
+        resetGame();
 
     // 2) actually wait for the simulation to run to completion
-    await simulateGame(threatOrRandomStrategy, threatBasedStrategy);
+        await simulateGame(threatOrRandomStrategy, threatBasedStrategy);
 
     // 3) only export *if* there’s a winner
-    const winner = detectWinner();
-    if (winner) {
-      const output = generateLogicExport();
-      // 4) download each winner into its own file
-      const fileName = `batch_result_${count+1}.lp`;
-      downloadFile(output, fileName, 'text/plain');
+        const winner = detectWinner();
+        if (winner) {
+            const output = generateLogicExport();
+            batchResults.push(`% Result ${count + 1}\n${output}\n`)
+            count++;
+            btn.textContent = `Running… (${count}/${desired})`;
 
-      count++;
-      btn.textContent = `Running… (${count}/${desired})`;
-    }
+        }
     // otherwise: no winner, loop again without bumping count
-  }
+    }
+    const finalOutput = batchResults.join('\n\n'); // Separate each result with a blank line
+    downloadFile(finalOutput, 'batch_results.lp', 'text/plain');
+    btn.textContent = `Done! Generated ${count} results`;
+    btn.disabled = false;
+    isBatchMode = false;
+}
 
-  btn.textContent = `Done! Generated ${count} results`;
-  btn.disabled = false;
+// NEW helper (optional)
+function clearWinBanner() {
+  const el = document.getElementById('winMessage');
+  if (el) {
+    el.textContent = '';
+    el.classList.remove('active');
+  }
+}
+
+function appendMoveToGameNote(row, column, color) {
+  const el = document.getElementById('gameNote');
+  const colLetter = String.fromCharCode(65 + column);      // A–G
+  const token = (color === 'red' ? colLetter : colLetter.toLowerCase()) + (6 - row);
+  el.value += `${token} `;
+}
+
+function removeLastMoveFromGameNote() {
+  const el = document.getElementById('gameNote');
+  const parts = el.value.trim().split(/\s+/); // tokens separated by whitespace
+  parts.pop();                                 // drop the last move token
+  el.value = parts.length ? parts.join(' ') + ' ' : '';
+}
+
+function updateMoveLabel() {
+  const count = gameState.moveHistory.length;
+  moveLbl.textContent = count === 0 ? 'First move: (1)' : `Next move: (${count + 1})`;
 }

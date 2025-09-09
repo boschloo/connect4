@@ -1,8 +1,8 @@
 % c4_asp_LEARNED.lp 
-% 
+%
 % Version compiled from the learned rules  
 
-% === L E A R N E D  P R O G R A M  ======== 2025-07-27 =========================
+% Background  given =============================
 role(1). role(2).
 col(X) :- cell(X,_,_).
 row(Y) :- cell(_,Y,_).
@@ -21,38 +21,37 @@ greaterX(V1) :- col(V1); col(V2); V2 > V1.
 board_size(V1,V2) :- col(V1); row(V2); not greaterX(V1); not greaterY(V2).
 
 % control v704 ----------------------------------
-control(V1) :- numberOf(V1,V3); numberOf(V2,V3); V1 < V2.                  
+control(V1) :- numberOf(V1,V3); numberOf(V2,V3); V1 < V2.
 control(V1) :- numberOf(V1,V2); numberOf(V4,V3); V2 < V3. 
 
-% legal v711 ------------------------------------
-legal(V1,drop(V2)) :- control(V1); cell(V2,V3,0); not terminal.     
+% Legal v711 ------------------------------------
+legal(V1,drop(V2)) :- control(V1); open(V2); not terminal.     
 
-% Action selection given ========================
-{does(X, A): legal(X, A)} = 1 :- not terminal. 
+% Action selection learned  ========================
+1 {does(V2,V1) : legal(V2,V1) } 1. 
 
 % target/2 v706, v716 ---------------------------
-target(V1,V2) :- cell(V1,V2,0); not cell(V1,V2-1,0).                       
-target(V1,V2,V3) :- cell(V1,V2,0); does(V3,drop(V1)); not cell(V1,V2-1,0).   
+target(V1,V2) :- cell(V1,V2,0); not cell(V1,V2-1,0).
+target(V1,V2,V3) :- target(V1,V2); does(V3,drop(V1)).  
 
 % next v710, v718 --------------------------------
-next(V1,V2,V3) :- cell(V1,V2,V3); not cell(V1,V2,0).    
-next(V1,V2,V3) :- cell(V1,V2,V3); cell(V1,V2-1,0).
-next(V1,V2,V3) :- cell(V1,V2,0); does(V3,drop(V1)); not cell(V1,V2-1,0).
-next(V1,V2,0) :- control(V3); cell(V1,V2,0); not does(V3,drop(V1)).
-next(control(V1)) :- role(V1); control(V2); not control(V1).
+next(V1,V2,V3) :- target(V1,V2,V3).
+next(V1,V2,V3) :- role(V3); cell(V1,V2,V3).
+next(V1,V2,0) :- control(V3); cell(V1,V2,0); not target(V1,V2,V3).
+next(control(V1)) :- opponent(V2,V1); not next(control(V2)).
 
 % goal v713 -------------------------------------
 goal(V1,100) :- line(V1).
-goal(V1,50) :- role(V1); not terminal.
-goal(V1,0) :- role(V1); V2 != V1; goal(V2,100).
+goal(V1,50) :- opponent(V1,V2); not terminal.
+goal(V1,0) :- line(V2); opponent(V1,V2).
 
 % terminal v715 ---------------------------------
+terminal :- line(V1).
 terminal :- not open.
-terminal :- role(V1); line(V1).
 
 % open v717 ------------------------------------
-open(V1) :- cell(V1,V2-1,0).
-open :- cell(V1,V2-1,0).
+open(V1) :- cell(V1,V2,0).
+open :- cell(V1,V2,0).
 
 % opponent v708b --------------------------------
 opponent(V1,V2) :- role(V1); role(V2); V2 != V1.    
@@ -98,8 +97,6 @@ check(P,X) :- cell(X-3,Y+3,P), cell(X-2,Y+2,P),  cell(X-1,Y+1,P), cell(X,Y,0),  
 
 center(X) :- X > 2, X < 6, col(X).
 
-% ===================================================================
-
 % Game status --------------------------------------------------------------------------
 cell(1,6,0). cell(2,6,0). cell(3,6,0). cell(4,6,0). cell(5,6,0). cell(6,6,0). cell(7,6,0).
 cell(1,5,0). cell(2,5,0). cell(3,5,0). cell(4,5,2). cell(5,5,0). cell(6,5,0). cell(7,5,0).
@@ -116,3 +113,21 @@ cell(1,1,2). cell(2,1,1). cell(3,1,1). cell(4,1,2). cell(5,1,2). cell(6,1,1). ce
 % 2 1 1 2 2 1 2
 
 #show next/3.
+
+% clingo version 5.4.0
+% Reading from ...loo/connect4/learned/c4_asp_LEARNED.lp
+% Solving...
+% Answer: 1
+% next(1,6,0) next(2,6,0) next(3,6,0) next(5,6,0) next(6,6,0) next(7,6,0) next(1,5,0) next(2,5,0) next(3,5,0) next(6,5,0) next(7,5,0) next(3,4,0) next(6,4,0) next(7,4,0) next(3,3,0) next(4,4,1) next(5,4,1) next(1,2,1) next(2,2,1) next(4,2,1) next(5,2,1) next(6,2,1) next(2,1,1) next(3,1,1) next(6,1,1) next(4,5,2) next(1,3,2) next(2,3,2) next(4,3,2) next(5,3,2) next(7,2,2) next(1,1,2) next(4,1,2) next(5,1,2) next(7,1,2) next(4,6,0) next(5,5,0) next(2,4,0) next(6,3,0) next(7,3,0) next(3,2,0) next(1,4,1)
+% Optimization: 40 20 20
+% Answer: 2
+% next(1,6,0) next(2,6,0) next(3,6,0) next(5,6,0) next(6,6,0) next(7,6,0) next(1,5,0) next(2,5,0) next(3,5,0) next(6,5,0) next(7,5,0) next(3,4,0) next(6,4,0) next(7,4,0) next(3,3,0) next(4,4,1) next(5,4,1) next(1,2,1) next(2,2,1) next(4,2,1) next(5,2,1) next(6,2,1) next(2,1,1) next(3,1,1) next(6,1,1) next(4,5,2) next(1,3,2) next(2,3,2) next(4,3,2) next(5,3,2) next(7,2,2) next(1,1,2) next(4,1,2) next(5,1,2) next(7,1,2) next(4,6,0) next(5,5,0) next(1,4,0) next(2,4,0) next(6,3,0) next(7,3,0) next(3,2,1)
+% Optimization: 20 0 0
+% OPTIMUM FOUND
+
+% Models       : 2
+%   Optimum    : yes
+% Optimization : 20 0 0
+% Calls        : 1
+% Time         : 0.012s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+% CPU Time     : 0.007s

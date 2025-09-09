@@ -2,6 +2,8 @@
 % testing legal/2.
 
 #show legal/2.
+#show target/2.
+#show control/1.
 #show does/2.
 
 % Test 128 - empty board ---------------------------------------------------
@@ -122,6 +124,49 @@
 % Answer: 1
 
 % SATISFIABLE
+
+% Test 132a  -  Board almost full, one column open, player 1 won ------------------------
+
+cell(1,6,1). cell(2,6,1). cell(3,6,1). cell(4,6,1). cell(5,6,2). cell(6,6,0). cell(7,6,1).
+cell(1,5,1). cell(2,5,2). cell(3,5,2). cell(4,5,1). cell(5,5,2). cell(6,5,2). cell(7,5,2).
+cell(1,4,1). cell(2,4,1). cell(3,4,1). cell(4,4,2). cell(5,4,1). cell(6,4,1). cell(7,4,1).
+cell(1,3,2). cell(2,3,2). cell(3,3,2). cell(4,3,1). cell(5,3,2). cell(6,3,2). cell(7,3,2).
+cell(1,2,1). cell(2,2,1). cell(3,2,1). cell(4,2,2). cell(5,2,1). cell(6,2,1). cell(7,2,1).
+cell(1,1,2). cell(2,1,2). cell(3,1,2). cell(4,1,1). cell(5,1,2). cell(6,1,2). cell(7,1,2).
+
+% 1 1 1 1 2 . 1
+% 1 2 2 1 2 2 2
+% 1 1 1 2 1 1 1
+% 2 2 2 1 2 2 2
+% 1 1 1 2 1 1 1
+% 2 2 2 1 2 2 2
+
+% Solving...
+% Answer: 1
+
+% SATISFIABLE
+
+% Test 132b  -  Board almost full, one column open, no lines ------------------------
+
+% cell(1,6,1). cell(2,6,1). cell(3,6,2). cell(4,6,1). cell(5,6,2). cell(6,6,0). cell(7,6,1).
+% cell(1,5,1). cell(2,5,2). cell(3,5,1). cell(4,5,1). cell(5,5,2). cell(6,5,2). cell(7,5,2).
+% cell(1,4,1). cell(2,4,1). cell(3,4,1). cell(4,4,2). cell(5,4,1). cell(6,4,1). cell(7,4,1).
+% cell(1,3,2). cell(2,3,2). cell(3,3,2). cell(4,3,1). cell(5,3,2). cell(6,3,2). cell(7,3,2).
+% cell(1,2,1). cell(2,2,1). cell(3,2,1). cell(4,2,2). cell(5,2,1). cell(6,2,1). cell(7,2,1).
+% cell(1,1,2). cell(2,1,2). cell(3,1,2). cell(4,1,1). cell(5,1,2). cell(6,1,2). cell(7,1,2).
+
+% 1 1 2 1 2 . 1
+% 1 2 1 1 2 2 2
+% 1 1 1 2 1 1 1
+% 2 2 2 1 2 2 2
+% 1 1 1 2 1 1 1
+% 2 2 2 1 2 2 2
+
+% Solving...
+% Answer: 1
+% legal(2,drop(6)) does(2,drop(6))
+% Optimization: 20 20
+% OPTIMUM FOUND
 
 % === L E A R N E D  P R O G R A M  ======== 2025-07-27 =========================
 role(1). role(2).
