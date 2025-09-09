@@ -1,32 +1,22 @@
 % c4_v717_open_las.lp
-% Learning open
-% ASP-code for playing Connect Four.
-% Version to be used in the learning process
+% TO LEARN: open, open/1
 
-% Background knowledge -------------------------------------------------------
+% Background
 board_size(7,6).
 col(X) :- X = 1..M, board_size(M,N).
 row(Y) :- Y = 1..N, board_size(M,N).
 
-% Roles / players -------------------------------------------------------------
 role(1). role(2).
 
-% Game state ------------------------------------------------------------------
-control(2).
-
-% open(V1) :- cell(V1,V2-1,0).
-
-#modeh(open(var(x))).
+% Mode bias 
 #modeh(open).
+#modeh(open(var(x))).
 #modeb(1,role(var(r))).
-#modeb(1,control(var(r))).
 #modeb(2, cell(var(x),var(y),var(r))).
-#modeb(2, cell(var(x),var(y),0)).
-#modeb(2, cell(var(x),var(y)-1,var(r))).
-#modeb(2, cell(var(x),var(y)-1,0)).
-
+#modeb(2, cell(var(x),var(y),0)). 
 #maxv(3).
 
+% Examples 
 #pos({open, open(1), open(2), open(3), open(4), open(5), open(7)},{open(6)},{
 cell(1,6,0). cell(2,6,0). cell(3,6,0). cell(4,6,0). cell(5,6,0). cell(6,6,2). cell(7,6,0).
 cell(1,5,0). cell(2,5,0). cell(3,5,0). cell(4,5,2). cell(5,5,0). cell(6,5,1). cell(7,5,0).
@@ -58,16 +48,16 @@ cell(1,1,2). cell(2,1,2). cell(3,1,2). cell(4,1,1). cell(5,1,2). cell(6,1,2). ce
 % 1 1 1 2 1 1 1
 % 2 2 2 1 2 2 2
 
-% (base) ~/c4 % ilasp --version=2i c4_v717_open_las.lp   
-% open(V1) :- cell(V1,V2-1,0).
-% open :- cell(V1,V2-1,0).
+% (base) ~/c4 % ilasp --version=2i c4_v717a_open_las.lp 
+% open :- cell(V1,V2,0).
+% open(V1) :- cell(V1,V2,0).
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% Pre-processing                          : 0.036s
-% %% Hypothesis Space Generation             : 0.372s
-% %% Counterexample search                   : 0.007s
+% %% Pre-processing                          : 0.024s
+% %% Hypothesis Space Generation             : 0.088s
+% %% Counterexample search                   : 0.006s
 % %%   - CDOEs                               : 0s
-% %%   - CDPIs                               : 0.005s
-% %% Hypothesis Search                       : 0.07s
-% %% Total                                   : 0.485s
+% %%   - CDPIs                               : 0.003s
+% %% Hypothesis Search                       : 0.017s
+% %% Total                                   : 0.134s
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

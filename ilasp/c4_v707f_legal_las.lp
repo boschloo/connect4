@@ -1,9 +1,7 @@
-% c4_v707f_legal_las.lp
+% c4_v707_legal_las.lp
+% TO LEARN: legal/2.
 
-% TO LEARN: 
-% legal(P, drop(X)) :- control(P), open(X), not terminal.
-
-% Background knowledge -------------------------------------------------------
+% Background
 board_size(7,6).
 col(X) :- X = 1..M, board_size(M,N).
 row(Y) :- Y = 1..N, board_size(M,N).
@@ -29,7 +27,7 @@ line(P) :- vert(X,Y,P).
 line(P) :- dia1(X,Y,P). 
 line(P) :- dia2(X,Y,P).
 
-% Mode bias -------------------------------------------------------------------
+% Mode bias
 #modeh(legal(var(r), drop(var(x)))).
 #modeb(1, role(var(r))).
 #modeb(1, control(var(r))).
@@ -41,7 +39,7 @@ line(P) :- dia2(X,Y,P).
 #modeb(1, terminal).
 #maxv(3).
 
-% Examples ---------------------------------------------------------------------
+% Examples
 #pos({
 legal(2,drop(1)),legal(2,drop(2)),legal(2,drop(3)),legal(2,drop(4)),legal(2,drop(5)),legal(2,drop(7))  
 },{
@@ -80,7 +78,7 @@ cell(1,1,2). cell(2,1,2). cell(3,1,2). cell(4,1,1). cell(5,1,2). cell(6,1,2). ce
 control(1).
 }).
 
-% (base) ~/c4 % ilasp --version=4 c4_v707f_legal_las.lp
+% (base) ~/c4 % ilasp --version=4 c4_v707_legal_las.lp
 % legal(V1,drop(V2)) :- control(V1); open(V2); not terminal.
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

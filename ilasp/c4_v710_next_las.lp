@@ -1,20 +1,17 @@
-% c4_v710_next2_las.lp
-% Learning next/3.
+% c4_v710_next_las.lp
+% TO LEARN: next/3.
 % Without the use of legal and /or target
 
-% Background knowledge -------------------------------------------------------
+% Background
 board_size(7,6).
 col(X) :- X = 1..M, board_size(M,N).
 row(Y) :- Y = 1..N, board_size(M,N).
 
-% Roles / players -------------------------------------------------------------
 role(1). role(2).
-
-% Additional concepts --------------------------------------------------------
 open(V1) :- cell(V1,V2-1,0).
 open :- cell(V1,V2-1,0).
 
-% Mode bias ------------------------------------------------------------------
+% Mode bias
 #modeh(next(var(x),var(y),var(r))).
 #modeh(next(var(x),var(y),0)).
 #modeb(1, role(var(r))).
@@ -27,7 +24,7 @@ open :- cell(V1,V2-1,0).
 #modeb(1, does(var(r), drop(var(x)))).
 #maxv(3).
 
-% Example ---------------------------------------------------------------------
+% Examples
 #pos({
 % . . . . 1 . .
 % . . . . 1 . 2
@@ -85,18 +82,20 @@ does(1,drop(3)).
 
 }).
 
-% (base) ~/c4 % ilasp --version=2i c4_v710_next2_las.lp
+% (base) ~/c4 % ilasp --version=4 c4_v710_next_las.lp       
 % next(V1,V2,V3) :- cell(V1,V2,V3); not cell(V1,V2,0).
 % next(V1,V2,V3) :- cell(V1,V2,V3); cell(V1,V2-1,0).
 % next(V1,V2,V3) :- cell(V1,V2,0); does(V3,drop(V1)); not cell(V1,V2-1,0).
 % next(V1,V2,0) :- control(V3); cell(V1,V2,0); not does(V3,drop(V1)).
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% Pre-processing                          : 0.025s
-% %% Hypothesis Space Generation             : 0.449s
+% %% Pre-processing                          : 0.024s
+% %% Hypothesis Space Generation             : 0.448s
+% %% Conflict analysis                       : 0.116s
+% %%   - Positive Examples                   : 0.116s
 % %% Counterexample search                   : 0.004s
 % %%   - CDOEs                               : 0s
 % %%   - CDPIs                               : 0.004s
-% %% Hypothesis Search                       : 0.074s
-% %% Total                                   : 0.554s
+% %% Hypothesis Search                       : 0.029s
+% %% Total                                   : 0.63s
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

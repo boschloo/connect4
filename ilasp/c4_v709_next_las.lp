@@ -1,32 +1,20 @@
-% c4_v709_next1.lp
-% Learning next/3.
-% 
+% c4_v709_next.lp
+% TO LEARN: next/3.
 
-% Background knowledge -------------------------------------------------------
+% Background 
 board_size(7,6).
 col(X) :- X = 1..M, board_size(M,N).
 row(Y) :- Y = 1..N, board_size(M,N).
-
-% Roles / players -------------------------------------------------------------
 role(1). role(2).
 
-% Additional concepts --------------------------------------------------------
-open(V1) :- cell(V1,V2-1,0).
-open :- cell(V1,V2-1,0).
-
-% Game state update  ---------------------------------------------------------- 
+open(V1) :- cell(V1,V2,0).
+open :- cell(V1,V2,0).
 target(V1,V2) :- cell(V1,V2,0); not cell(V1,V2-1,0).
-target(X,Y,P) :- does(P, drop(X)), cell(X,Y,0), not cell(X,Y-1,0).
+target(V1,V2,V3) :- cell(V1,V2,0), does(V3, drop(V1)), not cell(V1,V2-1,0).
 
-% Legal moves: Actions --------------------------------------------------------
 legal(V1,drop(V2)) :- control(V1); cell(V2,V3,0).
 
-% Game state update  ----- TO BE LEARNED ------------------------------------ 
-% next(X,Y,P) :- cell(X,Y,P), role(P).
-% next(X,Y,P) :- target(X,Y,P).
-% next(X,Y,0) :- cell(X,Y,0), not target(X,Y,_).
-
-% Mode bias ------------------------------------------------------------------
+% Mode bias
 #modeh(next(var(x),var(y),var(r))).
 #modeh(next(var(x),var(y),0)).
 #modeb(1, role(var(r))).
@@ -37,9 +25,6 @@ legal(V1,drop(V2)) :- control(V1); cell(V2,V3,0).
 #modeb(1, target(var(x),var(y),var(r))).
 #modeb(1, cell(var(x),var(y),var(r))).
 #modeb(1, cell(var(x),var(y),0)).
-#modeb(1, cell(var(x),var(y)-1,0)).
-#modeb(1, does(var(r), drop(var(x)))).
-#modeb(1, legal(var(r), drop(var(x)))).
 #maxv(3).
 
 % Examples
@@ -153,17 +138,19 @@ does(1,drop(3)).
 
 }).
 
-% (base) ~/c4 % ilasp --version=2i c4_v709_next1_las.lp -ml=4
+% (base) ~/c4 % ilasp --version=4 c4_v709_next_las.lp -ml=4 
 % next(V1,V2,V3) :- target(V1,V2,V3).
-% next(V1,V2,V3) :- role(V3); cell(V1,V2,V3).
+% next(V1,V2,V3) :- cell(V1,V2,V3); not cell(V1,V2,0).
 % next(V1,V2,0) :- control(V3); cell(V1,V2,0); not target(V1,V2,V3).
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %% Pre-processing                          : 0.016s
-% %% Hypothesis Space Generation             : 7.847s
+% %% Pre-processing                          : 0.026s
+% %% Hypothesis Space Generation             : 1.523s
+% %% Conflict analysis                       : 0.588s
+% %%   - Positive Examples                   : 0.588s
 % %% Counterexample search                   : 0.006s
 % %%   - CDOEs                               : 0s
 % %%   - CDPIs                               : 0.006s
-% %% Hypothesis Search                       : 2.424s
-% %% Total                                   : 10.332s
+% %% Hypothesis Search                       : 0.186s
+% %% Total                                   : 2.375s
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

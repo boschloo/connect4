@@ -1,5 +1,10 @@
+% c4_v701_vert_las.lp
+% TO LEARN: line/1, vert/3
+
+% Background
 role(1). role(2).
 
+% Mode bias
 #modeh(vert(var(x),var(y),var(r))).
 #modeh(line(var(r))).
 #modeb(1, role(var(r))).
@@ -13,6 +18,7 @@ role(1). role(2).
 
 #maxv(3). 
 
+% Examples
 #pos({vert(6,2,2),line(2)},{
 vert(1,6,0), vert(2,6,0), vert(3,6,0), vert(4,6,0), vert(5,6,0), vert(6,6,0), vert(7,6,0), 
 vert(1,5,0), vert(2,5,0), vert(3,5,0), vert(4,5,0), vert(5,5,0), vert(6,5,0), vert(7,5,0), 

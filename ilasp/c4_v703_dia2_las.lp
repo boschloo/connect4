@@ -1,6 +1,7 @@
 % c4_v703_dia2_las.lp
-% Purpose: mirror of v702. Learn dia2 with two examples
+% TO LEARN: line/1, dia2/3
 
+% Background
 role(1). role(2).
 
 #modeh(dia2(var(x),var(y),var(r))).
@@ -92,7 +93,7 @@ cell(1,1,2). cell(2,1,2). cell(3,1,2). cell(4,1,1). cell(5,1,2). cell(6,1,2). ce
 % 1 1 1 2 1 1 1
 % 2 2 2 1 2 2 2
 
-% (base) ~/c4 % ilasp --version=2i c4_v702_dia1_mirr_las.lp -ml=5 --max-rule-length=6   
+% (base) ~/c4 % ilasp --version=2i c4_v703_dia2_las.lp -ml=5 --max-rule-length=6   
 % line(V1) :- dia2(V2,V3,V1).
 % dia2(V1,V2,V3) :- role(V3); cell(V1,V2,V3); cell(V1+1,V2-1,V3); cell(V1+2,V2-2,V3); cell(V1+3,V2-3,V3).
 

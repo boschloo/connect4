@@ -1,14 +1,17 @@
 % c4_v708a_opponent_las.lp
-% to learn opponent/2.
+% TO LEARN: pponent/2.
 
+% Background
 role(1). role(2).
 
+% Mode bias
 #modeh(opponent(var(r),var(r))).
 #modeb(2, role(var(r))).
 #modeb(1, var(r) != var(r)).
 #modeb(1, var(r) < var(r)).
 #maxv(2).
 
+% Example
 #pos({opponent(1,2), opponent(2,1)},{opponent(1,1)},{}).
 
 % (base) ~/c4 % ilasp --version=2i c4_v708a_opponent_las.lp          

@@ -1,10 +1,25 @@
 % c4_v705_boardsize_las.lp
-% Return the board size.
+% TO LEARN: size/2 as board_size/2
 
+% Background
 role(1). role(2).
 col(X) :- cell(X,_,_).
 row(Y) :- cell(_,Y,_).
 
+% Mode bias
+#modeh(size(var(x), var(y))).
+#modeh(greaterX(var(x))).
+#modeh(greaterY(var(y))).
+#modeb(1, role(var(r))).
+#modeb(1, greaterX(var(x))).
+#modeb(1, greaterY(var(y))).
+#modeb(2, col(var(x))).
+#modeb(2, row(var(y))).
+#modeb(1, var(x) > var(x)).
+#modeb(1, var(y) > var(y)).
+#maxv(2).
+
+% Examples
 #pos({size(7,6)},{
 size(1,1), size(2,1), size(3,1), size(4,1), size(5,1), size(6,1), size(7,1), 
 size(1,2), size(2,2), size(3,2), size(4,2), size(5,2), size(6,2), size(7,2), 
@@ -22,19 +37,7 @@ cell(1,2,0). cell(2,2,0). cell(3,2,0). cell(4,2,0). cell(5,2,0). cell(6,2,0). ce
 cell(1,1,1). cell(2,1,0). cell(3,1,0). cell(4,1,0). cell(5,1,0). cell(6,1,0). cell(7,1,0).
 }).
 
-#modeh(size(var(x), var(y))).
-#modeh(greaterX(var(x))).
-#modeh(greaterY(var(y))).
-#modeb(1, role(var(r))).
-#modeb(1, greaterX(var(x))).
-#modeb(1, greaterY(var(y))).
-#modeb(2, col(var(x))).
-#modeb(2, row(var(y))).
-#modeb(1, var(x) > var(x)).
-#modeb(1, var(y) > var(y)).
-#maxv(2).
-
-% (base) ~/c4 % ilasp --version=2i c4_v705_size_las.lp -ml=5 --max-rule-length=6
+% (base) ~/c4 % ilasp --version=2i c4_v705_boardsize_las.lp -ml=4 --max-rule-length=5
 % greaterY(V1) :- row(V1); row(V2); V2 > V1.
 % greaterX(V1) :- col(V1); col(V2); V2 > V1.
 % size(V1,V2) :- col(V1); row(V2); not greaterX(V1); not greaterY(V2).

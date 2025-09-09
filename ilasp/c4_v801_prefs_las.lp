@@ -1,4 +1,4 @@
-% c4_v801_las.lp
+% c4_v801_prefs_las.lp
 % 
 % % Game state --------------------------------------------------------------------
 cell(1,6,0). cell(2,6,0). cell(3,6,0). cell(4,6,0). cell(5,6,0). cell(6,6,0). cell(7,6,0).
@@ -47,7 +47,7 @@ control(1).
 % :~ does(P,drop(X)), not check(O,X), opponent(P,O). [20@1] 
 % :~ does(P,drop(X)), not center(X). [10@1]
 
-% (base) ~/c4 % ilasp --version=2i c4_v801_las.lp                          
+% (base) ~/c4 % ilasp --version=2i c4_v801_prefs_las.lp                          
 % :~ does(V1,drop(V2)), not center(V2).[20@1, V1, V2]
 % :~ does(V1,drop(V2)), not check(V1,V2).[20@2, V1, V2]
 % :~ does(V1,drop(V2)), role(V3), not check(V3,V2).[20@3, V1, V2, V3]
@@ -64,8 +64,6 @@ control(1).
 
 center(X) :- X > 2, X < 6, col(X).
 
-% ===================================================================
-
 % === P R O G R A M ======== 2025-07-26 ======================================
 board_size(7,6).
 role(1). role(2).
@@ -77,15 +75,8 @@ row(Y) :- Y = 1..N, board_size(M,N).
 init(X,Y,0) :- col(X), row(Y). 
 init(control(1)).
 
-% Initializing a game -- Not to be used when an explicit game state is given -
-% cell(X,Y,P) :- init(X,Y,P).
-% control(P) :- init(control(P)).
-
 % Legal moves: Actions -------------------------------------------------------
 legal(P, drop(X)) :- control(P), open(X), not terminal.
-
-% Action selection -----------------------------------------------------------
-% {does(X, A): legal(X, A)} = 1 :- not terminal. 
 
 % Game state update  --------------------------------------------------------- 
 target(X,Y) :- cell(X,Y,0), not cell(X,Y-1,0).

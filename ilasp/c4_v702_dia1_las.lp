@@ -1,5 +1,10 @@
+% c4_v702_dia1_las.lp
+% TO LEARN: line/1, dia1/3
+
+% Background
 role(1). role(2).
 
+% Mode bias
 #modeh(dia1(var(x),var(y),var(r))).
 #modeh(line(var(r))).
 #modeb(1, role(var(r))).
@@ -13,6 +18,7 @@ role(1). role(2).
 
 #maxv(3). 
 
+% Examples
 #pos({dia1(4,2,1),line(1)},{
 dia1(1,6,0), dia1(2,6,0), dia1(3,6,0), dia1(4,6,0), dia1(5,6,0), dia1(6,6,0), dia1(7,6,0), 
 dia1(1,5,0), dia1(2,5,0), dia1(3,5,0), dia1(4,5,0), dia1(5,5,0), dia1(6,5,0), dia1(7,5,0), 
@@ -95,10 +101,10 @@ cell(1,1,2). cell(2,1,2). cell(3,1,2). cell(4,1,1). cell(5,1,2). cell(6,1,2). ce
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %% Pre-processing                          : 0.026s
-% %% Hypothesis Space Generation             : 13.214s
+% %% Hypothesis Space Generation             : 13.096s
 % %% Counterexample search                   : 0.009s
 % %%   - CDOEs                               : 0s
 % %%   - CDPIs                               : 0.006s
-% %% Hypothesis Search                       : 2.495s
-% %% Total                                   : 15.76s
+% %% Hypothesis Search                       : 2.47s
+% %% Total                                   : 15.617s
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
