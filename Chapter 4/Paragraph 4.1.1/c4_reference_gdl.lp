@@ -1,4 +1,4 @@
-% c4_gdl.lp
+% c4_reference_gdl.lp
 % ASP-code for playing Connect Four.
 % Version according to GDL-standards
 %

@@ -1,4 +1,4 @@
-% c4_asp.lp
+% c4_reference_asp.lp
 % ASP-code for playing Connect Four.
 % Version to be used in the learning process
 %
