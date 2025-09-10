@@ -24,13 +24,13 @@ board_size(V1,V2) :- col(V1); row(V2); not greaterX(V1); not greaterY(V2).
 control(V1) :- numberOf(V1,V3); numberOf(V2,V3); V1 < V2.
 control(V1) :- numberOf(V1,V2); numberOf(V4,V3); V2 < V3. 
 
-% Legal v711 ------------------------------------
+% Legal v7071 ------------------------------------
 legal(V1,drop(V2)) :- control(V1); open(V2); not terminal.     
 
-% Action selection learned  ========================
+% Action selection v719  ========================
 1 {does(V2,V1) : legal(V2,V1) } 1. 
 
-% target/2 v706, v716 ---------------------------
+% target/2 v706 -------------------------------
 target(V1,V2) :- cell(V1,V2,0); not cell(V1,V2-1,0).
 target(V1,V2,V3) :- target(V1,V2); does(V3,drop(V1)).  
 
@@ -53,7 +53,7 @@ terminal :- not open.
 open(V1) :- cell(V1,V2,0).
 open :- cell(V1,V2,0).
 
-% opponent v708b --------------------------------
+% opponent v708c --------------------------------
 opponent(V1,V2) :- role(V1); role(V2); V2 != V1.    
 
 % Row-of-four v700, v701, v702, v703-------------
@@ -114,20 +114,20 @@ cell(1,1,2). cell(2,1,1). cell(3,1,1). cell(4,1,2). cell(5,1,2). cell(6,1,1). ce
 
 #show next/3.
 
-% clingo version 5.4.0
-% Reading from ...loo/connect4/learned/c4_asp_LEARNED.lp
-% Solving...
-% Answer: 1
-% next(1,6,0) next(2,6,0) next(3,6,0) next(5,6,0) next(6,6,0) next(7,6,0) next(1,5,0) next(2,5,0) next(3,5,0) next(6,5,0) next(7,5,0) next(3,4,0) next(6,4,0) next(7,4,0) next(3,3,0) next(4,4,1) next(5,4,1) next(1,2,1) next(2,2,1) next(4,2,1) next(5,2,1) next(6,2,1) next(2,1,1) next(3,1,1) next(6,1,1) next(4,5,2) next(1,3,2) next(2,3,2) next(4,3,2) next(5,3,2) next(7,2,2) next(1,1,2) next(4,1,2) next(5,1,2) next(7,1,2) next(4,6,0) next(5,5,0) next(2,4,0) next(6,3,0) next(7,3,0) next(3,2,0) next(1,4,1)
-% Optimization: 40 20 20
-% Answer: 2
-% next(1,6,0) next(2,6,0) next(3,6,0) next(5,6,0) next(6,6,0) next(7,6,0) next(1,5,0) next(2,5,0) next(3,5,0) next(6,5,0) next(7,5,0) next(3,4,0) next(6,4,0) next(7,4,0) next(3,3,0) next(4,4,1) next(5,4,1) next(1,2,1) next(2,2,1) next(4,2,1) next(5,2,1) next(6,2,1) next(2,1,1) next(3,1,1) next(6,1,1) next(4,5,2) next(1,3,2) next(2,3,2) next(4,3,2) next(5,3,2) next(7,2,2) next(1,1,2) next(4,1,2) next(5,1,2) next(7,1,2) next(4,6,0) next(5,5,0) next(1,4,0) next(2,4,0) next(6,3,0) next(7,3,0) next(3,2,1)
-% Optimization: 20 0 0
-% OPTIMUM FOUND
-
-% Models       : 2
-%   Optimum    : yes
-% Optimization : 20 0 0
-% Calls        : 1
-% Time         : 0.012s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
-% CPU Time     : 0.007s
+# clingo version 5.4.0
+# Reading from /Users/boschloo/c4/c4_asp_LEARNED.lp
+# Solving...
+# Answer: 1
+# next(1,6,0) next(2,6,0) next(3,6,0) next(5,6,0) next(6,6,0) next(7,6,0) next(1,5,0) next(2,5,0) next(3,5,0) next(6,5,0) next(7,5,0) next(3,4,0) next(6,4,0) next(7,4,0) next(3,3,0) next(4,4,1) next(5,4,1) next(1,2,1) next(2,2,1) next(4,2,1) next(5,2,1) next(6,2,1) next(2,1,1) next(3,1,1) next(6,1,1) next(4,5,2) next(1,3,2) next(2,3,2) next(4,3,2) next(5,3,2) next(7,2,2) next(1,1,2) next(4,1,2) next(5,1,2) next(7,1,2) next(4,6,0) next(5,5,0) next(2,4,0) next(6,3,0) next(7,3,0) next(3,2,0) next(1,4,1)
+# Optimization: 40 20 20
+# Answer: 2
+# next(1,6,0) next(2,6,0) next(3,6,0) next(5,6,0) next(6,6,0) next(7,6,0) next(1,5,0) next(2,5,0) next(3,5,0) next(6,5,0) next(7,5,0) next(3,4,0) next(6,4,0) next(7,4,0) next(3,3,0) next(4,4,1) next(5,4,1) next(1,2,1) next(2,2,1) next(4,2,1) next(5,2,1) next(6,2,1) next(2,1,1) next(3,1,1) next(6,1,1) next(4,5,2) next(1,3,2) next(2,3,2) next(4,3,2) next(5,3,2) next(7,2,2) next(1,1,2) next(4,1,2) next(5,1,2) next(7,1,2) next(4,6,0) next(5,5,0) next(1,4,0) next(2,4,0) next(6,3,0) next(7,3,0) next(3,2,1)
+# Optimization: 20 0 0
+# OPTIMUM FOUND
+#
+# Models       : 2
+#   Optimum    : yes
+# Optimization : 20 0 0
+# Calls        : 1
+# Time         : 0.015s (Solving: 0.00s 1st Model: 0.00s Unsat: 0.00s)
+# CPU Time     : 0.008s
